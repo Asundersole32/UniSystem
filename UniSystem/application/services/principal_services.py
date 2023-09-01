@@ -1,28 +1,25 @@
-from UniSystem.domain.schemas import Professor
-from UniSystem.infra.postgres.connection import async_session
-from UniSystem.infra.postgres.tables import Professors
-from UniSystem.application.security import get_hash_password
-from fastapi import HTTPException, status
+from UniSystem.domain.schemas import *
+from UniSystem.infra.querys.adds import *
+from UniSystem.application.exceptions.http_exceptions import *
 
 
 async def cad_professor_service(professor: Professor):
     try:
-        hashed_password = get_hash_password(professor.password)
-        professor.academic_type_id = 2
-        professor.professional_status = 'professor'
-        async with async_session() as session:
-            session.add(Professors(registration=professor.registration, name=professor.name,
-                                   registration_date=professor.registration_date,
-                                   institutional_email=professor.institutional_email, password=hashed_password,
-                                   academic_type_id=professor.academic_type_id,
-                                   academic_formation=professor.academic_formation,
-                                   academic_status=professor.academic_status,
-                                   professional_status=professor.professional_status,
-                                   salary=professor.salary, academic_training_place=professor.academic_training_place))
-            await session.commit()
+        professor_register_query(professor)
     except Exception as e:
-        print(e)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST
-        )
-        
+        bad_request()
+
+
+async def cad_student_service(student: Student):
+    try:
+        student_register_query(student)
+    except Exception as e:
+        bad_request()
+
+
+async def cad_subject_service(subject: Subject):
+    try:
+        subject_register_query(subject)
+    except Exception as e:
+        bad_request()
+
