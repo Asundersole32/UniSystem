@@ -25,42 +25,57 @@ async def register_student(student: Student):
 
 @principal_router.post('/subject')
 async def register_subject(subject: Subject):
-    cad = cad_subject_service(subject)
+    cad = await cad_subject_service(subject)
     return cad
 
 
 @principal_router.delete('/professor/{professor_id}')
-async def del_professor(professor_id: int):
+async def del_professor(professor_id: str):
     return
 
 
 @principal_router.delete('/student/{student_id}')
-async def del_student(student_id: int):
+async def del_student(student_id: str):
     return
 
 
 @principal_router.delete('/subject/{subject_id}')
-async def del_subject(subject_id: int):
+async def del_subject(subject_id: str):
     return
 
 
 @principal_router.get('/professor/{professor_id}')
-async def get_professor(professor_id: int):
-    return
+async def get_professor(professor_id: str):
+    get = await find_professor_service(professor_id)
+    return get
 
 
 @principal_router.get('/student/{student_id}')
-async def get_student(student_id: int):
-    return
+async def get_student(student_id: str):
+    get = await find_student_service(student_id)
+    return get
+
+
+@principal_router.get('/subject/{subject_id}')
+async def get_subject(subject_id: str):
+    get = await find_subject_service(subject_id)
+    return get
+
+
+@principal_router.get('/principal/{principal_id}')
+async def get_principal(principal_id: str):
+    get = await find_principal_service(principal_id)
+    return get
+
 
 
 @principal_router.put('/professor/{professor_id}')
-async def update_professor(professor_id: int, field: str, value):
+async def update_professor(professor_id: str, field: str, value):
     return
 
 
 @principal_router.put('/students/{student_id}')
-async def update_student(student_id: int, field: str, value):
+async def update_student(student_id: str, field: str, value):
     return
 
 

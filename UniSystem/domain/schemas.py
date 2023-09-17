@@ -8,12 +8,9 @@ class Academic(BaseModel):
     registration_date: date
     institutional_email: str
     password: str
-    academic_type_id: int
 
 
 class Student(Academic):
-    coefficient: float
-    academic_period: int
     course: str
 
 
@@ -25,9 +22,10 @@ class Professor(Academic):
     academic_training_place: str
 
 
-class Principal(Professor):
+class Principal(Academic):
     entry_board_date: date
     exit_board_date: date
+    salary: float
     vice_principal: str
 
 
