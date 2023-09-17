@@ -84,7 +84,14 @@ async def find_principal(principal_registration):
         principal_institutional_row = principal_institutional_data.scalars().first()
 
         data = {
-
+            'registration': principal_institutional_row.registration,
+            'name': principal_institutional_row.name,
+            'institutional_email': principal_institutional_row.institutional_email,
+            'registration_date': principal_info_row.registration_date,
+            'entry_board_date': principal_info_row.entry_board_date,
+            'exit_board_date': principal_info_row.exit_board_date,
+            'salary': principal_info_row.salary,
+            'vice_principal': principal_info_row.vice_principal
         }
 
         return data
@@ -92,17 +99,46 @@ async def find_principal(principal_registration):
 
 async def find_subject(subject_id):
     async with async_session() as session:
-        subject_data = session.query(Subjects).filter(Subjects.id == subject_id).first()
+        subject_data = session.execute(select(Subjects).where(Subjects.id == subject_id))
 
-        return subject_data
+        subject_data_row = subject_data.scalars().first()
+
+        data = {
+            'id': subject_data_row.id,
+            'professor_registration': subject_data_row.professor_registration,
+            'course': subject_data_row.course,
+            'subject_name': subject_data_row.subject_name,
+            'workload': subject_data_row.workload
+        }
+
+        return data
 
 
 async def find_student_subject_notes(student_registration):
     async with async_session() as session:
-        subject_note_data = session.query(SubjectsNotes).filter\
-            (SubjectsNotes.student_registration == student_registration).all()
+        subject_note_data = await session.execute(select(SubjectsNotes).where
+                                            (SubjectsNotes.student_registration == student_registration))
 
-        return subject_note_data
+        subject_note_data_rows = subject_note_data.scalars()
+
+        data = {}
+
+        i = 1
+        for obj in subject_note_data_rows:
+            row = {
+                'subjects_id': obj.subject_id,
+                'student_registration': obj.student_registration,
+                'professor_registration': obj.professor_registration,
+                'subject_start_date': obj.subject_start_date,
+                'note': obj.note,
+                'note_date': obj.note_date,
+                'approved': obj.approved
+            }
+            data[i] = row
+
+            i = i+1
+
+        return data
 
 
 async def find_subject_notes(subject_id):

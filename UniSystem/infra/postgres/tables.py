@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint, Date, DECIMAL, ForeignKeyConstraint
+from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint, Date, DECIMAL, ForeignKeyConstraint, Boolean
 from sqlalchemy.orm import declarative_base
 
 
@@ -74,8 +74,10 @@ class SubjectsNotes(Base):
     subjects_id = Column(String, ForeignKey('subjects.id'), nullable=False)
     student_registration = Column(String, ForeignKey('students.registration'), primary_key=True)
     professor_registration = Column(String, ForeignKey("professors.registration"))
+    subject_start_date = Column(Date, nullable=False)
     note = Column(DECIMAL(2, 2))
     note_date = Column(Date)
+    approved = Column(Boolean, nullable=False)
     note_PK = UniqueConstraint(subjects_id, student_registration, professor_registration)
 
 
