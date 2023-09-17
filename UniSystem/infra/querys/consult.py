@@ -61,7 +61,14 @@ async def find_dean(dean_registration):
         dean_institutional_row = dean_institutional_data.scalars().first()
 
         data = {
-
+            'registration': dean_institutional_row.registration,
+            'name': dean_institutional_row.name,
+            'institutional_email': dean_institutional_row.institutional_email,
+            'registration_date': dean_info_row.registration_date,
+            'rectory_entry_date': dean_info_row.rectory_entry_date,
+            'rectory_exit_date': dean_info_row.rectory_exit_date,
+            'salary': dean_info_row.salary,
+            'academic_training_place': dean_info_row.academic_training_place
         }
 
         return data
@@ -69,11 +76,18 @@ async def find_dean(dean_registration):
 
 async def find_principal(principal_registration):
     async with async_session() as session:
-        principal_institutional_data = session.query(AcademicInstitutionalData).filter\
-            (AcademicInstitutionalData.registration == principal_registration).first()
-        principal_info = session.query(Deans).filter(Deans.registration == principal_registration).first()
+        principal_institutional_data = await session.execute(select(AcademicInstitutionalData).where
+            (AcademicInstitutionalData.registration == principal_registration))
+        principal_info = await session.execute(select(Deans).where(Deans.registration == principal_registration))
 
-        return [principal_institutional_data, principal_info]
+        principal_info_row = principal_info.scalars().first()
+        principal_institutional_row = principal_institutional_data.scalars().first()
+
+        data = {
+
+        }
+
+        return data
 
 
 async def find_subject(subject_id):
