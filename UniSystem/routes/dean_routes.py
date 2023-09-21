@@ -2,7 +2,8 @@ from fastapi import APIRouter
 from UniSystem.domain.schemas import Dean, Principal, Professor
 
 
-dean_router = APIRouter(prefix='/dean')
+dean_router = APIRouter(prefix='/dean',
+                        tags=['Dean'])
 
 
 @dean_router.put('/professor/{professor_id}')

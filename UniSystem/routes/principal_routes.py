@@ -3,12 +3,14 @@ from UniSystem.application.services.principal_services import *
 from fastapi import APIRouter
 
 
-principal_router = APIRouter(prefix='/principal')
+principal_router = APIRouter(prefix='/principal',
+                             tags=['Principal'])
 
 
 @principal_router.put('/account')
-async def update_account(field: str, new_value):
-    return
+async def update_account(principal_registration: str, field: str, new_value):
+    update = update_account_service(principal_registration, field, new_value)
+    return update
 
 
 @principal_router.post('/professor')
@@ -31,17 +33,20 @@ async def register_subject(subject: Subject):
 
 @principal_router.delete('/professor/{professor_id}')
 async def del_professor(professor_id: str):
-    return
+    delt = del_professor_service(professor_id)
+    return delt
 
 
 @principal_router.delete('/student/{student_id}')
 async def del_student(student_id: str):
-    return
+    delt = del_student_service(student_id)
+    return delt
 
 
 @principal_router.delete('/subject/{subject_id}')
 async def del_subject(subject_id: str):
-    return
+    delt = del_subject_service(subject_id)
+    return delt
 
 
 @principal_router.get('/professor/{professor_id}')

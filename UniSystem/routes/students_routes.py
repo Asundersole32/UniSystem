@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 from UniSystem.domain.schemas import Student
 
-student_router = APIRouter(prefix='/students')
+student_router = APIRouter(prefix='/students',
+                           tags=['Students'])
 
 
 @student_router.put('/account')
