@@ -2,10 +2,10 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
-    username: str
-    email: str
-    disabled: bool | None = None
-    type: int
+    registration: str
+    name: str
+    institutional_email: str
+    academic_type_id: str
 
 
 class Token(BaseModel):

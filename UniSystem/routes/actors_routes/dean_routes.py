@@ -1,5 +1,7 @@
 from fastapi import APIRouter
+
 from UniSystem.domain.schemas import Dean, Principal, Professor
+from UniSystem.application.services.dean_services import *
 
 
 dean_router = APIRouter(prefix='/dean',
@@ -23,4 +25,5 @@ async def update_account(dean: Dean):
 
 @dean_router.post('/principal')
 async def principal_register(principal: Principal):
-    return
+    cad = await principal_register_service(principal)
+    return cad

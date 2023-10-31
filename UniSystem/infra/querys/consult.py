@@ -1,6 +1,37 @@
+import sqlalchemy.orm.exc
+
 from UniSystem.infra.postgres.connection import async_session
 from UniSystem.infra.postgres.tables import *
 from sqlalchemy.future import select
+
+
+async def find_admins():
+    try:
+        async with async_session() as session:
+            admins_data = await session.execute(select(AcademicInstitutionalData).where
+                                            (AcademicInstitutionalData.academic_type_id == 5))
+
+            admins_data_rows = admins_data.all()
+
+            i = 1
+            data = {}
+
+            for obj in admins_data_rows:
+                obj_data = {
+                    'registration': obj.registration,
+                    'name': obj.name,
+                    'institutional_email': obj.institutional_email,
+                    'academic_type_id': obj.academic_type_id,
+                    'password': obj.password
+                }
+
+                data[i] = obj_data
+                i = i + 1
+
+                return data
+
+    except sqlalchemy.orm.exc.NoResultFound as Error:
+        return False
 
 
 async def find_academic(academic_email):

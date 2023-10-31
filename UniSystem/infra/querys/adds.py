@@ -3,6 +3,18 @@ from UniSystem.infra.postgres.connection import async_session
 from UniSystem.infra.postgres.tables import *
 from UniSystem.application.security import get_hash_password
 
+from sqlalchemy.future import select
+
+
+async def admin_register_query(admin: Academic):
+    hashed_password = get_hash_password(admin.password)
+    async with async_session() as session:
+        session.add(AcademicInstitutionalData(registration=admin.registration, academic_type_id=5,
+                                              name=admin.name, institutional_email=admin.institutional_email,
+                                              password=hashed_password))
+
+        await session.commit()
+
 
 async def professor_register_query(professor: Professor):
     hashed_password = get_hash_password(professor.password)
@@ -60,26 +72,23 @@ async def dean_register_query(dean: Dean):
                                               institutional_email=dean.institutional_email,
                                               password=hashed_password))
 
-        session.commit()
+        await session.commit()
 
 
 async def principal_register_query(principal: Principal):
-    hashed_password = get_hash_password(principal.password)
     async with async_session() as session:
         session.add(Principals(registration=principal.registration,
-                               registration_date=principal.registration_date,
-                               academic_formation=principal.academic_formation,
-                               academic_status=principal.academic_status,
-                               salary=principal.salary, academic_training_place=principal.academic_training_place,
                                entry_board_date=principal.entry_board_date, exit_board_date=principal.exit_board_date,
+                               salary=principal.salary,
                                vice_principal=principal.vice_principal))
 
-        session.add(AcademicInstitutionalData(registration=principal.registration, academic_type_id=3,
-                                              name=principal.name,
-                                              institutional_email=principal.institutional_email,
-                                              password=hashed_password))
+        academic_data = await session.execute(select(AcademicInstitutionalData).
+                                        where(AcademicInstitutionalData.registration == principal.registration))
 
-        session.commit()
+        academic_data_row = academic_data.scalars().first()
+        academic_data_row.academic_type_id = 3
+
+        await session.commit()
 
 
 async def subject_notes_register_query(subject_note: SubjectNote):
@@ -88,4 +97,4 @@ async def subject_notes_register_query(subject_note: SubjectNote):
                                   professor_registration=subject_note.professor_registration, note=subject_note.note,
                                   note_date=subject_note.note_date))
 
-        session.commit()
+        await session.commit()

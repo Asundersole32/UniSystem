@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from typing import Annotated
-from os import getenv
 
 from UniSystem.util.env_conection import env_connection_values
 from UniSystem.infra.querys.consult import *
@@ -59,13 +58,12 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_context)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITH])
         user_email: str = payload.get('sub')
-        print(user_email)
         if user_email is None:
-            credentials_exeption()
+            credentials_exception()
         token_data = TokenData(email=user_email)
     except JWTError:
-        credentials_exeption()
+        credentials_exception()
     user = await get_user(user_email=token_data.email)
     if user is None:
-        credentials_exeption()
+        credentials_exception()
     return user

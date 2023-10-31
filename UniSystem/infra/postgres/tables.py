@@ -42,7 +42,6 @@ class Professors(Base):
 class Principals(Base):
     __tablename__ = 'principals'
     registration = Column(None, ForeignKey('professors.registration'), primary_key=True)
-    registration_date = Column(Date, nullable=False)
     entry_board_date = Column(Date, nullable=False)
     exit_board_date = Column(Date, nullable=False)
     salary = Column(DECIMAL(10, 2), nullable=False)
@@ -85,3 +84,4 @@ new_academic_type1 = AcademicTypes(type='Student')
 new_academic_type2 = AcademicTypes(type='Professor')
 new_academic_type3 = AcademicTypes(type='Principal')
 new_academic_type4 = AcademicTypes(type='Dean')
+new_academic_type5 = AcademicTypes(type='Administrator')

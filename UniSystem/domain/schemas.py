@@ -5,7 +5,7 @@ from datetime import date
 class Academic(BaseModel):
     registration: str
     name: str
-    registration_date: date
+    registration_date: date | None = None
     institutional_email: str
     password: str
 
@@ -17,12 +17,12 @@ class Student(Academic):
 class Professor(Academic):
     academic_formation: str
     academic_status: str
-    professional_status: str
     salary: float
     academic_training_place: str
 
 
-class Principal(Academic):
+class Principal(BaseModel):
+    registration: str
     entry_board_date: date
     exit_board_date: date
     salary: float
@@ -31,7 +31,7 @@ class Principal(Academic):
 
 class Dean(Academic):
     rectory_entry_date: date
-    rectory_exit_date: date
+    rectory_exit_date: date | None = None
     academic_training_place: date
 
 
@@ -47,5 +47,5 @@ class SubjectNote(BaseModel):
     subject_id: str
     student_registration: str
     professor_registration: str
-    note: float
-    note_date: date
+    note: float | None = None
+    note_date: date | None = None

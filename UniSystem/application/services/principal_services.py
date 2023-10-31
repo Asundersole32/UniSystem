@@ -9,6 +9,7 @@ from UniSystem.infra.querys.updates import *
 async def update_account_service(principal_registration: str, field: str, value):
     try:
         await update_principal_account(principal_registration, field, value)
+        return {'response': True}
     except Exception as e:
         bad_request(e)
 
@@ -16,6 +17,7 @@ async def update_account_service(principal_registration: str, field: str, value)
 async def cad_professor_service(professor: Professor):
     try:
         await professor_register_query(professor)
+        return {'response': True}
     except Exception as e:
         bad_request(e)
 
@@ -23,6 +25,7 @@ async def cad_professor_service(professor: Professor):
 async def cad_student_service(student: Student):
     try:
         await student_register_query(student)
+        return {'response': True}
     except Exception as e:
         bad_request(e)
 
@@ -30,6 +33,7 @@ async def cad_student_service(student: Student):
 async def cad_subject_service(subject: Subject):
     try:
         await subject_register_query(subject)
+        return {'response': True}
     except Exception as e:
         bad_request(e)
 
@@ -66,6 +70,7 @@ async def del_student_service(student_registration: str):
     try:
         await del_student(student_registration)
         await del_subject_student_notes(student_registration)
+        return {'response': True}
     except Exception as e:
         bad_request(e)
 
@@ -74,6 +79,7 @@ async def del_subject_service(subject_id: str):
     try:
         await del_subject(subject_id)
         await del_subject_notes(subject_id)
+        return {'response': True}
     except Exception as e:
         bad_request(e)
 
@@ -81,5 +87,6 @@ async def del_subject_service(subject_id: str):
 async def del_professor_service(professor_registration: str):
     try:
         await del_professor(professor_registration)
+        return {'response': True}
     except Exception as e:
         bad_request(e)

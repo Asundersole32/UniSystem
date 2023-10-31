@@ -13,7 +13,7 @@ security_router = APIRouter(tags=['Security'])
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
-        credentials_exeption()
+        credentials_exception()
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user['institutional_email']}, expires_delta=access_token_expires

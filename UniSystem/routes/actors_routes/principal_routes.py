@@ -1,6 +1,10 @@
 from UniSystem.domain.schemas import Student, Professor, Subject
+from UniSystem.application.exceptions.http_exceptions import unauthorized_access
 from UniSystem.application.services.principal_services import *
-from fastapi import APIRouter
+from UniSystem.application.security import *
+
+from fastapi import APIRouter, Depends
+from typing import Annotated
 
 
 principal_router = APIRouter(prefix='/principal',
@@ -8,15 +12,21 @@ principal_router = APIRouter(prefix='/principal',
 
 
 @principal_router.put('/account')
-async def update_account(principal_registration: str, field: str, new_value):
-    update = update_account_service(principal_registration, field, new_value)
-    return update
+async def update_account(field: str, new_value, user: Annotated[User, Depends(get_current_user)]):
+    if user['academic_type_id'] == 2:
+        update = update_account_service(user['registration'], field, new_value)
+        return update
+    else:
+        unauthorized_access()
 
 
 @principal_router.post('/professor')
-async def register_professor(professor: Professor):
-    cad = await cad_professor_service(professor)
-    return cad
+async def register_professor(professor: Professor, user: Annotated[User, Depends(get_current_user)]):
+    if user['academic_type_id'] == 2 or user['academic_type_id'] == 5:
+        cad = await cad_professor_service(professor)
+        return cad
+    else:
+        unauthorized_access()
 
 
 @principal_router.post('/students')
